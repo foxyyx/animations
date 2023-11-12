@@ -59,7 +59,7 @@ end
 
 function panelControl(type)
     if (type == 'open') then
-        anim = animation:create(0, 200, 'Linear', panelControl('close'))
+        anim = animation:create(0, 200, 1000, 'Linear', panelControl('close'))
         addEventHandler('onClientRender', root, render)
     elseif (type == 'close') then
         removeEventHandler('onClientRender', root, render)
