@@ -65,3 +65,28 @@ end
 
 panelControl('open')
 ```
+Utilização do updateValues
+```lua
+local anim;
+
+function render()
+    local value = anim:get()
+    
+    dxDrawRectangle(value, 0, 100, 100)
+end
+
+function panelControl(type)
+    if (type == 'open') then
+        addEventHandler('onClientRender', root, render)
+        anim = animation:create(0, 200, 1000, 'Linear', panelControl('close'))
+    elseif (type == 'close') then
+        anim:updateValues(200, 0)
+        Timer(function()
+            removeEventHandler('onClientRender', root, render)
+            anim:destroy()
+        end, 1000, 1)
+    end
+end
+
+panelControl('open')
+```
