@@ -1,4 +1,4 @@
-# animations
+# Aurora Animations
 ### Um sistema para facilitar o uso do interpolate
 
 ## Funções
