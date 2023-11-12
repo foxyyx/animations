@@ -9,10 +9,10 @@ function animation:create(inicial, final, time, type, func)
     assert(type(type) == 'string', 'INICIAL value must be a number, got '..type(type))
 
     local instance = {
-        inicial = tonumber(inicial) or 0,
-        final = tonumber(final) or 0,
+        inicial = inicial or 0,
+        final = final or 0,
         type = type or 'Linear',
-        time = tonumber(time) or 1000,
+        time = time or 1000,
         tick = getTickCount(),
         value = 0,
         __atributte = {func = func, executed = false}
@@ -30,19 +30,21 @@ end
 function animation:updateValues(inicial, final, time, type, func)
     assert(type(inicial) == 'number', 'INICIAL value must be a number, got '..type(inicial))
     assert(type(final) == 'number', 'FINAL value must be a number, got '..type(final))
+    assert(type(time) == 'number', 'TIME value must be a number, got '..type(time))
+    assert(type(type) == 'string', 'INICIAL value must be a number, got '..type(type))
 
     private[self] = {
-        inicial = tonumber(inicial) or 0,
-        final = tonumber(final) or 0,
+        inicial = inicial or 0,
+        final = final or 0,
         type = type or private[self].type,
-        time = tonumber(time) or private[self].time,
+        time = time or private[self].time,
         tick = getTickCount(),
         __atributte = {func = private[self].__atributte.func, executed = false}
     }
 end
 
 function animation:get()
-    private[self].value = interpolateBetween(private[self].inicial, 0, 0, private[self].final, 0, 0, (getTickCount() - private[self].tick)private[self].time, private[self].type)
+    private[self].value = interpolateBetween(private[self].inicial, 0, 0, private[self].final, 0, 0, (getTickCount() - private[self].tick) / private[self].time, private[self].type)
     if (self.__atributte.func and self:getValues().finalized and not private[self].__atributte.executed) then
         self.__atributte.func()
         private[self].__atributte.executed = true
@@ -68,4 +70,4 @@ end
 
 function destroyAllAnimations()
     private = {}
-end
+end 
