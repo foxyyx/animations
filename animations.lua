@@ -37,7 +37,7 @@ function animation:updateValues(inicial, final, time, type, func)
         type = type or private[self].type,
         time = tonumber(time) or private[self].time,
         tick = getTickCount(),
-        __func = {func = private[self].__func, executed = private[self].__func.executed}
+        __func = {func = private[self].__func, executed = false}
     }
 end
 
