@@ -59,8 +59,8 @@ end
 
 function panelControl(type)
     if (type == 'open') then
-        addEventHandler('onClientRender', root, render)
         anim = animation:create(0, 200, 'Linear', panelControl('close'))
+        addEventHandler('onClientRender', root, render)
     elseif (type == 'close') then
         removeEventHandler('onClientRender', root, render)
         anim:destroy()
@@ -81,8 +81,8 @@ end
 
 function panelControl(type)
     if (type == 'open') then
-        addEventHandler('onClientRender', root, render)
         anim = animation:create(0, 200, 1000, 'Linear', panelControl('close'))
+        addEventHandler('onClientRender', root, render)
     elseif (type == 'close') then
         anim:updateValues(200, 0)
         Timer(function()
