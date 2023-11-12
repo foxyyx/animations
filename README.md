@@ -1,6 +1,37 @@
 # animations
 ### Um sistema para facilitar o uso do interpolate
 
+## Funções
+Criação
+```lua
+animation:create(100, 200, 1000, 'Linear', function() end) -- O ultimo argumento não é necessario
+```
+Atualização de valores
+```lua
+animation:updateValues(200, 100, 1000, 'Linear', function() end) -- O ultimo argumento não é necessario
+```
+Atualização de tick
+```lua
+animation:updateTick()
+```
+Pegar o valor do interpolate
+```lua
+animation:get()
+```
+Pegar informações da animação (data, currentValue, finalized)
+```lua
+animation:getValues()
+```
+Destruir animação
+```lua
+animation:destroy()
+```
+Destruir todas as animações
+```lua
+destroyAllAnimations()
+```
+
+
 ## Utilização
 Utilização basica
 ```lua
@@ -28,6 +59,7 @@ function panelControl(type)
         anim = animation:create(0, 200, 'Linear', panelControl('close'))
     elseif (type == 'close') then
         removeEventHandler('onClientRender', root, render)
+        anim:destroy()
     end
 end
 
