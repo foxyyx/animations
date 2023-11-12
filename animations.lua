@@ -30,16 +30,14 @@ end
 function animation:updateValues(inicial, final, time, type, func)
     assert(type(inicial) == 'number', 'INICIAL value must be a number, got '..type(inicial))
     assert(type(final) == 'number', 'FINAL value must be a number, got '..type(final))
-    assert(type(time) == 'number', 'TIME value must be a number, got '..type(time))
-    assert(type(type) == 'string', 'INICIAL value must be a number, got '..type(type))
 
     private[self] = {
         inicial = tonumber(inicial) or 0,
         final = tonumber(final) or 0,
-        type = type or 'Linear',
-        time = tonumber(time) or 1000,
+        type = type or private[self].type,
+        time = tonumber(time) or private[self].time,
         tick = getTickCount(),
-        __func = func
+        __func = func or private[self].__func
     }
 end
 
@@ -61,6 +59,10 @@ end
 
 function animation:destroy()
     private[self] = nil
+end
+
+function animation:removeFunction()
+    private[self].__func = nil
 end
 
 function destroyAllAnimations()
