@@ -4,11 +4,13 @@
 ## Funções
 Criação
 ```lua
+-- inicial, final, tempo, tipo, função ao finalizar
 animation:create(100, 200, 1000, 'Linear', function() end) -- O ultimo argumento não é necessario
 ```
 Atualização de valores
 ```lua
-animation:updateValues(200, 100, 1000, 'Linear', function() end) -- O ultimo argumento não é necessario
+-- inicial, final, tempo, tipo, função ao finalizar
+animation:updateValues(200, 100, 1000, 'Linear', function() end) -- Apenas os dois primeiros argumentos são obrigatorios
 ```
 Atualização de tick
 ```lua
