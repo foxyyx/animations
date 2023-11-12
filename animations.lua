@@ -45,7 +45,7 @@ function animation:get()
     private[self].value = interpolateBetween(private[self].inicial, 0, 0, private[self].final, 0, 0, (getTickCount() - private[self].tick)private[self].time, private[self].type)
     if (self.__func and self:getValues().finalized and private[self].__func.executed) then
         self.__func()
-        private[self].__func.executed = false
+        private[self].__func.executed = true
     end
     return private[self].value or 0
 end    
