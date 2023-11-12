@@ -15,7 +15,7 @@ function animation:create(inicial, final, time, type, func)
         time = tonumber(time) or 1000,
         tick = getTickCount(),
         value = 0,
-        __func = func
+        __func = {func = func, executed = false}
     }
 
     setmetatable(instance, {__index = self})
@@ -37,14 +37,15 @@ function animation:updateValues(inicial, final, time, type, func)
         type = type or private[self].type,
         time = tonumber(time) or private[self].time,
         tick = getTickCount(),
-        __func = func or private[self].__func
+        __func = {func = private[self].__func, executed = private[self].__func.executed}
     }
 end
 
 function animation:get()
     private[self].value = interpolateBetween(private[self].inicial, 0, 0, private[self].final, 0, 0, (getTickCount() - private[self].tick)private[self].time, private[self].type)
-    if (self.__func and self:getValues().finalized) then
+    if (self.__func and self:getValues().finalized and private[self].__func.executed) then
         self.__func()
+        private[self].__func.executed = false
     end
     return private[self].value or 0
 end    
