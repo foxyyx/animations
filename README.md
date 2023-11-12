@@ -1,5 +1,6 @@
 # Aurora Animations
 ### Um sistema para facilitar o uso do interpolate
+Atualmente é possivel manipular apenas um valor, em breve será possivel manipular os três valores do interpolate.
 
 ## Funções
 Criação
