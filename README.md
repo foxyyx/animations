@@ -30,6 +30,10 @@ Destruir todas as animações
 ```lua
 destroyAllAnimations()
 ```
+Desatribuir função
+```lua
+animation:removeFunction()
+```
 
 
 ## Utilização
