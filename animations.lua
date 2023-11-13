@@ -5,8 +5,6 @@ local private = {}
 function animation:create(inicial, final, time, type, func)
     assert(type(inicial) == 'number', 'INICIAL value must be a number, got '..type(inicial))
     assert(type(final) == 'number', 'FINAL value must be a number, got '..type(final))
-    assert(type(time) == 'number', 'TIME value must be a number, got '..type(time))
-    assert(type(type) == 'string', 'INICIAL value must be a number, got '..type(type))
 
     local instance = {
         inicial = inicial or 0,
