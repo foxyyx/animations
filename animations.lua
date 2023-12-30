@@ -54,7 +54,7 @@ function animation:getValues()
     return {
         data = private[self], 
         currentValue = (private[self].value or 0),
-        finalized = getTickCount() >= private[self].tick
+        finalized = getTickCount() - private[self].final >= private[self].time
     }
 end
 
