@@ -49,7 +49,7 @@ Pegar o valor do interpolate
 ```lua
 Animation:get()
 ```
-Pegar informações da animação (data, currentValue, finalized)
+Pegar informações da animação
 ```lua
 Animation:getData()
 ```
