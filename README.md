@@ -74,9 +74,12 @@ local anim = Animation:create({
     subEasing = 'InOutQuad'
 })
 
+
 addEventHandler('onClientRender', root, function()
-    local value = anim:get()
+    local value = anim:get(t)
 
     dxDrawRectangle(100 - value[1]/2, 100 - value[1]/2, value[1], value[1])
+
+    Animation:updateGlobalTick() -- Para otimização do codigo em geral, não ficar executando varias funções ao mesmo tempo ( IMPORTANTE PARA O FUNCIONAMENTO!!!! )
 end)
 ```
