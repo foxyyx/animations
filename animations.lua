@@ -144,9 +144,9 @@ function Animation:updateTick()
     return true;
 end
 
-function Animation:get()
+function Animation:get(tick)
 
-    currentTick = getTickCount()
+    currentTick = tick or getTickCount()
     
     self:tryExecuteAtributte()
     
