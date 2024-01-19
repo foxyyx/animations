@@ -1,6 +1,6 @@
 
 Animation = {}
-local currentTick = 0
+local currentTick = getTickCount()
 
 -- main
 
@@ -145,8 +145,6 @@ function Animation:updateTick()
 end
 
 function Animation:get(tick)
-
-    updateGlobalTickRate()
     
     self:tryExecuteAtributte()
     
@@ -174,4 +172,6 @@ addEventHandler('onClientRender', root, function()
     local value = anim:get()
 
     dxDrawRectangle(100 - value[1]/2, 100 - value[1]/2, value[1], value[1])
+
+    updateGlobalTickRate()
 end)
