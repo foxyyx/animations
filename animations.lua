@@ -50,7 +50,7 @@ function Animation:tryExecuteAtributte()
 end
 
 function Animation:executeAnimation()
-    self.values.interpolate = {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick / self.time), self.easing, unpack(self.aditionalValues))}
+    self.values.interpolate = {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick / self.time), self.easing, self.aditionalValues and unpack(self.aditionalValues))}
     return self.values.interpolate;
 end
 
@@ -61,7 +61,7 @@ local customAnimations = {
         if (currentTick - self.values.tick >= self.time) then
             self:updateTick()
         end
-        return {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick) / self.time, self.subEasing or 'Linear', unpack(self.aditionalValues))};
+        return {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick) / self.time, self.subEasing or 'Linear', self.aditionalValues and unpack(self.aditionalValues))};
     end,
     ['Floating'] = function(self, currentTick)
         if (currentTick - self.values.tick >= self.time) then
@@ -70,7 +70,7 @@ local customAnimations = {
                 final = self.start
             })
         end
-        return {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick) / self.time, self.subEasing or 'Linear', unpack(self.aditionalValues))};
+        return {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick) / self.time, self.subEasing or 'Linear', self.aditionalValues and unpack(self.aditionalValues))};
     end
 }
 
