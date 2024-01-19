@@ -2,6 +2,13 @@
 ### Um sistema para facilitar o uso do interpolate
 V2.0.0
 
+## Custom Animations - Easing
+```lua
+-- Pulse, Floating
+
+-- As customAnimations estão abertas para os desenvolvedores adicionarem mais tipos ao decorrer de suas necessidades, em breve no branch main sera adicionado mais diversidades de animações
+```
+
 ## Funções
 Criação
 ```lua
