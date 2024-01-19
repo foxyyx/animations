@@ -5,7 +5,7 @@ V2.0.0
 ## Funções
 Criação
 ```lua
-table Animation:create({
+Animation:create({
     start = {50, 0, 0}, -- Os três argumentos do interpolate inseridos em uma tabela
     final = {150, 0, 0}, -- Os três argumentos do interpolate inseridos em uma tabela
     time = 1000, -- Tempo de progresso da interpolação
@@ -20,7 +20,7 @@ table Animation:create({
 ```
 Atualização de valores
 ```lua
-bool Animation:update({
+Animation:update({
     start = {0, 0, 0}, -- Os três argumentos do interpolate inseridos em uma tabela
     final = {50, 0, 0}, -- Os três argumentos do interpolate inseridos em uma tabela
     time = 1000, -- Tempo de progresso da interpolação
@@ -36,23 +36,23 @@ bool Animation:update({
 ```
 Atualização de tick
 ```lua
-bool Animation:updateTick()
+Animation:updateTick()
 ```
 Pegar o valor do interpolate
 ```lua
-table Animation:get()
+Animation:get()
 ```
 Pegar informações da animação (data, currentValue, finalized)
 ```lua
-table animation:getData()
+Animation:getData()
 ```
 Desatribuir atributo
 ```lua
-bool Animation:removeAtributte()
+Animation:removeAtributte()
 ```
 Resetar contagem de execuções do atributo
 ```lua
-bool Animation:resetAtributte()
+Animation:resetAtributte()
 ```
 
 
