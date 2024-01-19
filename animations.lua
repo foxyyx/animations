@@ -134,6 +134,13 @@ function Animation:update(data)
     return true;
 end
 
+function Animation:updateTick()
+    if (not customAnimations[self.easing]) then
+        self.values.tick = getTickCount()
+    end
+    return true;
+end
+
 function Animation:get()
     self:tryExecuteAtributte()
     
