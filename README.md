@@ -2,6 +2,13 @@
 ### Um sistema para facilitar o uso do interpolate
 V2.0.0
 
+# IMPORTANTE
+```lua
+-- Dentro do seu render utilize
+Animation:updateGlobalTick()
+-- Para o script não ficar executando varias vezes a função getTickCount()
+```
+
 ## Custom Animations - Easing
 ```lua
 -- Pulse, Floating
