@@ -70,7 +70,7 @@ local anim = Animation:create({
     start = {50, 0, 0},
     final = {150, 0, 0},
     time = 1000,
-    easing = 'Pulse',
+    easing = 'Floating',
     subEasing = 'InOutQuad'
 })
 
