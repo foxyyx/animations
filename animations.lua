@@ -146,7 +146,7 @@ end
 
 function Animation:get(tick)
 
-    currentTick = tick or getTickCount()
+    updateGlobalTickRate()
     
     self:tryExecuteAtributte()
     
@@ -154,6 +154,10 @@ function Animation:get(tick)
         return self:executeCustomAnimation();
     end
     return self:executeAnimation();
+end
+
+function updateGlobalTickRate(tick)
+    currentTick = tick or getTickCount()
 end
 
 -- example
