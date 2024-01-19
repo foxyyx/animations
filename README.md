@@ -48,11 +48,11 @@ table animation:getData()
 ```
 Desatribuir atributo
 ```lua
-Animation:removeAtributte()
+bool Animation:removeAtributte()
 ```
 Resetar contagem de execuções do atributo
 ```lua
-Animation:resetAtributte()
+bool Animation:resetAtributte()
 ```
 
 
