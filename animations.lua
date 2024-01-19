@@ -1,6 +1,6 @@
 
 Animation = {}
-local currentTick = getTickCount()
+local currentTick = 0
 
 -- main
 
@@ -144,34 +144,17 @@ function Animation:updateTick()
     return true;
 end
 
-function Animation:get(tick)    
-
-    updateGlobalTick(tick)
-
-    self:tryExecuteAtributte()
-    
-    if (customAnimations[self.easing]) then
-        return self:executeCustomAnimation();
+function Animation:get(tick)
+    if (currentTick < 1) then
+        self:tryExecuteAtributte()
+        
+        if (customAnimations[self.easing]) then
+            return self:executeCustomAnimation();
+        end
+        return self:executeAnimation();
     end
-    return self:executeAnimation();
 end
 
-function updateGlobalTick(tick)
+function Animation:updateGlobalTick(tick)
     currentTick = tick or getTickCount()
 end
-
--- example
-
-local anim = Animation:create({
-    start = {50, 0, 0},
-    final = {150, 0, 0},
-    time = 1000,
-    easing = 'Floating',
-    subEasing = 'InOutQuad'
-})
-
-addEventHandler('onClientRender', root, function()
-    local value = anim:get()
-
-    dxDrawRectangle(100 - value[1]/2, 100 - value[1]/2, value[1], value[1])
-end)
