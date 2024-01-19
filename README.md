@@ -1,99 +1,75 @@
 # Animations
 ### Um sistema para facilitar o uso do interpolate
-Atualmente é possivel manipular apenas um valor, em breve será possivel manipular os três valores do interpolate.
+V2.0.0
 
 ## Funções
 Criação
 ```lua
--- inicial, final, tempo, tipo, função ao finalizar
-animation:create(100, 200, 1000, 'Linear', function() end) -- O ultimo argumento não é necessario
+table Animation:create({
+    start = {50, 0, 0}, -- Os três argumentos do interpolate inseridos em uma tabela
+    final = {150, 0, 0}, -- Os três argumentos do interpolate inseridos em uma tabela
+    time = 1000, -- Tempo de progresso da interpolação
+    easing = 'Pulse', -- Tipo da easing da interpolação, aperto as customAnimations
+    subEasing = 'InOutQuad', -- Tipo da subEasing para as customAnimations
+    --[[
+    aditionalValues = {0, 10}, -- Valores adicionais do interpolate
+    atributte = function() end, -- Função que será executada ao fim da animação; PS: Algumas customAnimations são infinitas
+    atributteTimes = 2 -- O maximo de vezes que a função será iniciada, ao caso de funções infinitas ou updates no interpolate
+    ]]
+})
 ```
 Atualização de valores
 ```lua
--- inicial, final, tempo, tipo, função ao finalizar
-animation:updateValues(200, 100, 1000, 'Linear', function() end) -- Apenas os dois primeiros argumentos são obrigatorios
+bool Animation:update({
+    start = {0, 0, 0}, -- Os três argumentos do interpolate inseridos em uma tabela
+    final = {50, 0, 0}, -- Os três argumentos do interpolate inseridos em uma tabela
+    time = 1000, -- Tempo de progresso da interpolação
+    easing = 'Floating', -- Tipo da easing da interpolação, aperto as customAnimations
+    subEasing = 'InOutQuad', -- Tipo da subEasing para as customAnimations
+    --[[
+    aditionalValues = {10, 0}, -- Valores adicionais do interpolate
+    atributte = function() end, -- Função que será executada ao fim da animação; PS: Algumas customAnimations são infinitas
+    atributteTimes = 3, -- O maximo de vezes que a função será iniciada, ao caso de funções infinitas ou updates no interpolate
+    atributteReset = true -- Booleano para definir se o numero de vezes que o atributo foi executado vai ser resetado, voltando a 0
+    ]]
+})
 ```
 Atualização de tick
 ```lua
-animation:updateTick()
+bool Animation:updateTick()
 ```
 Pegar o valor do interpolate
 ```lua
-animation:get()
+table Animation:get()
 ```
 Pegar informações da animação (data, currentValue, finalized)
 ```lua
-animation:getValues()
+table animation:getData()
 ```
-Destruir animação
+Desatribuir atributo
 ```lua
-animation:destroy()
+Animation:removeAtributte()
 ```
-Destruir todas as animações
+Resetar contagem de execuções do atributo
 ```lua
-destroyAllAnimations()
-```
-Desatribuir função
-```lua
-animation:removeFunction()
+Animation:resetAtributte()
 ```
 
 
 ## Utilização
 Utilização basica
 ```lua
-local anim = animation:create(0, 200, 'Linear')
+local anim = Animation:create({
+    start = {50, 0, 0},
+    final = {150, 0, 0},
+    time = 1000,
+    easing = 'Pulse',
+    subEasing = 'InOutQuad'
+})
 
 addEventHandler('onClientRender', root, function()
     local value = anim:get()
 
-    dxDrawRectangle(value, 0, 100, 100)
+    dxDrawRectangle(100 - value[1]/2, 100 - value[1]/2, value[1], value[1])
 end)
-```
-Utilização com funções atribuidas na finalização da animação
-```lua
-local anim;
-
-function render()
-    local value = anim:get()
-    
-    dxDrawRectangle(value, 0, 100, 100)
-end
-
-function panelControl(type)
-    if (type == 'open') then
-        anim = animation:create(0, 200, 1000, 'Linear', panelControl('close'))
-        addEventHandler('onClientRender', root, render)
-    elseif (type == 'close') then
-        removeEventHandler('onClientRender', root, render)
-        anim:destroy()
-    end
-end
-
-panelControl('open')
-```
-Utilização do updateValues
-```lua
-local anim;
-
-function render()
-    local value = anim:get()
-    
-    dxDrawRectangle(value, 0, 100, 100)
-end
-
-function panelControl(type)
-    if (type == 'open') then
-        anim = animation:create(0, 200, 1000, 'Linear', panelControl('close'))
-        addEventHandler('onClientRender', root, render)
-    elseif (type == 'close') then
-        anim:updateValues(200, 0)
-        Timer(function()
-            removeEventHandler('onClientRender', root, render)
-            anim:destroy()
-        end, 1000, 1)
-    end
-end
-
-panelControl('open')
 ```
