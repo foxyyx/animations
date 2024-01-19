@@ -1,74 +1,144 @@
 
-// a
+Animation = {}
 
-animation = {}
-local private = {}
+-- main
 
-function animation:create(inicial, final, time, easing, func)
-    assert(type(inicial) == 'number', 'INICIAL value must be a number, got '..type(inicial))
-    assert(type(final) == 'number', 'FINAL value must be a number, got '..type(final))
-    assert(type(time) == 'number', 'TIME value must be a number, got '..type(time))
+function Animation:create(data)
 
-    local instance = {
-        inicial = inicial or 0,
-        final = final or 0,
-        easing = easing or 'Linear',
-        time = time or 1000,
-        tick = getTickCount(),
-        value = 0,
-        __atributte = {func = func, executed = false}
+    if (type(data.start) ~= 'table' or type(data.final) ~= 'table' or type(data.time) ~= 'number' or type(data.easing) ~= 'string') then
+        local input = (type(data.start) ~= 'table' and '\'start\' value must a be table, got '..type(data.start)) or (type(data.final) ~= 'table' and '\'final\' value must a be table, got '..type(data.final)) or (type(data.time) ~= 'number' and '\'time\' value must a be number, got '..type(data.time)) or (type(data.easing) ~= 'string' and '\'easing\' value must a be string, got '..type(data.easing)) 
+        return error(input)
+    end
+
+    local instance = {}
+    
+    -- fixed
+    instance.start = data.start
+    instance.final = data.final
+    instance.time = data.time
+    instance.easing = data.easing
+    instance.aditionalValues = data.aditionalValues or {}
+
+    -- others
+    instance.values = {
+        interpolate = 0,
+        tick = getTickCount()
     }
-    private[instance] = instance
+    instance.atributte = {
+        toExecute = data.atributte,
+        executeState = false,
+        timesToExecute = data.atributteTimes or 1,
+        timesExecuted = 0
+    }
 
-    setmetatable(instance, {__index = self})
+    setmetatable(instance, {
+        __index = self
+    })
 
     return instance;
 end
 
-function animation:updateTick()
-    private[self].tick = getTickCount()
-end
-
-function animation:updateValues(inicial, final, time, easing, func)
-    assert(type(inicial) == 'number', 'INICIAL value must be a number, got '..type(inicial))
-    assert(type(final) == 'number', 'FINAL value must be a number, got '..type(final))
-
-    private[self] = {
-        inicial = inicial or 0,
-        final = final or 0,
-        easing = easing or private[self].easing,
-        time = time or private[self].time,
-        tick = getTickCount(),
-        value = private[self].value or 0,
-        __atributte = {func = private[self].__atributte.func, executed = false}
-    }
-end
-
-function animation:get()
-    private[self].value = interpolateBetween(private[self].inicial, 0, 0, private[self].final, 0, 0, (getTickCount() - private[self].tick) / private[self].time, private[self].easing)
-    if (self.__atributte.func and self:getValues().finalized and not private[self].__atributte.executed) then
-        self.__atributte.func()
-        private[self].__atributte.executed = true
+function Animation:tryExecuteAtributte()
+    if (getTickCount() - self.values.tick >= self.time and type(self.atributte.toExecute) == 'function' and self.atributte.timesExecuted < self.atributte.timesToExecute) then
+        self.atributte.executeState = true
+        self.atributte.timesExecuted = self.atributte.timesExecuted + 1
+        return self.atributte.toExecute();
     end
-    return private[self].value or 0
-end    
-
-function animation:getValues()
-    return {
-        data = private[self], 
-        currentValue = (private[self].value or 0),
-        finalized = getTickCount() - private[self].final >= private[self].time
-    }
 end
 
-function animation:destroy()
-    private[self] = nil
+function Animation:executeAnimation()
+    self.values.interpolate = {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (getTickCount() - self.values.tick / self.time), self.easing, unpack(self.aditionalValues))}
+    return self.values.interpolate;
 end
 
-function animation:removeFunction()
-    private[self].__func = nil
+-- custom animation's
+
+local customAnimations = {
+    ['Pulse'] = function(self)
+        if (getTickCount() - self.values.tick >= self.time) then
+            self.values.tick = getTickCount()
+        end
+        return {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (getTickCount() - self.values.tick) / self.time, self.subEasing or 'Linear', unpack(self.aditionalValues))};
+    end,
+    ['Floating'] = function(self)
+        if (getTickCount() - self.values.tick >= self.time) then
+            self:update({
+                start = self.final,
+                final = self.start
+            })
+        end
+        return {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (getTickCount() - self.values.tick) / self.time, self.subEasing or 'Linear', unpack(self.aditionalValues))};
+    end
+}
+
+function Animation:executeCustomAnimation()
+    self.values.interpolate = customAnimations[self.easing](self)
+    return self.values.interpolate;
 end
 
-function destroyAllAnimations()
-    private = {}
-end 
+-- misc
+
+function Animation:isFinalized()
+    return getTickCount() - self.values.tick >= self.time;
+end
+
+function Animation:isStarted()
+    return getTickCount() - self.values.tick > 1;
+end
+
+function Animation:resetAtributte()
+    if (self.atributte.toExecute) then
+        self.atributte.executeState = false
+        self.atributte.timesExecuted = 0
+        return true;
+    end
+    return false;
+end
+
+function Animation:removeAtributte()
+    if (self.atributte.toExecute) then
+        self.atributte = {
+            toExecute = nil,
+            executeState = false,
+            timesToExecute = 1,
+            timesExecuted = 0
+        }
+        return true;
+    end
+    return false;
+end
+
+function Animation:getData()
+    return self;
+end
+
+function Animation:update(data)
+    
+    -- fixed
+    self.start = data.start or self.start
+    self.final = data.final or self.final
+    self.time = data.time or self.time
+    self.easing = data.easing or self.easing
+    self.aditionalValues = data.aditionalValues or self.aditionalValues
+
+    -- others
+    self.values.tick = getTickCount()
+    self.atributte.toExecute = data.atributte or self.atributte.toExecute
+    self.atributte.timesToExecute = data.atributteTimes or self.atributte.timesToExecute
+   
+    if (self.atributteReset) then
+        self.atributte.executeState = false
+        self.atributte.timesExecuted = 0
+    end
+
+    return true;
+end
+
+function Animation:get()
+    self:tryExecuteAtributte()
+    
+    if (customAnimations[self.easing]) then
+        return self:executeCustomAnimation();
+    end
+    return self:executeAnimation();
+end
