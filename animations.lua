@@ -39,8 +39,10 @@ function Animation:create(data)
 end
 
 function Animation:tryExecuteAtributte()
-    if (getTickCount() - self.values.tick >= self.time and type(self.atributte.toExecute) == 'function' and self.atributte.timesExecuted < self.atributte.timesToExecute) then
-        self.atributte.executeState = true
+    if (getTickCount() - self.values.tick >= self.time and type(self.atributte.toExecute) == 'function' and self.atributte.timesExecuted < self.atributte.timesToExecute and not self.atributte.executeState) then
+        if (self.atributte.timesExecuted >= self.atributte.timesToExecute) then
+            self.atributte.executeState = true
+        end
         self.atributte.timesExecuted = self.atributte.timesExecuted + 1
         return self.atributte.toExecute();
     end
