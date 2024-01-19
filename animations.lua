@@ -144,8 +144,10 @@ function Animation:updateTick()
     return true;
 end
 
-function Animation:get(tick)
-    
+function Animation:get(tick)    
+
+    updateGlobalTick(tick)
+
     self:tryExecuteAtributte()
     
     if (customAnimations[self.easing]) then
@@ -154,7 +156,7 @@ function Animation:get(tick)
     return self:executeAnimation();
 end
 
-function updateGlobalTickRate(tick)
+function updateGlobalTick(tick)
     currentTick = tick or getTickCount()
 end
 
@@ -172,6 +174,4 @@ addEventHandler('onClientRender', root, function()
     local value = anim:get()
 
     dxDrawRectangle(100 - value[1]/2, 100 - value[1]/2, value[1], value[1])
-
-    updateGlobalTickRate()
 end)
