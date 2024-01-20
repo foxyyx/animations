@@ -1,8 +1,6 @@
 
 Animation = {}
-local currentTick = 0
-
--- main
+local currentTick = getTickCount()
 
 function Animation:create(data)
 
@@ -63,7 +61,7 @@ local customAnimations = {
         end
         return {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick) / self.time, self.subEasing or 'Linear', self.aditionalValues and unpack(self.aditionalValues))};
     end,
-    ['Floating'] = function(self, currentTick)
+    ['Floating'] = function(self)
         if (currentTick - self.values.tick >= self.time) then
             self:update({
                 start = self.final,
@@ -144,15 +142,13 @@ function Animation:updateTick()
     return true;
 end
 
-function Animation:get(tick)
-    if (currentTick < 1) then
-        self:tryExecuteAtributte()
-        
-        if (customAnimations[self.easing]) then
-            return self:executeCustomAnimation();
-        end
-        return self:executeAnimation();
+function Animation:get()
+    self:tryExecuteAtributte()
+    
+    if (customAnimations[self.easing]) then
+        return self:executeCustomAnimation();
     end
+    return self:executeAnimation();
 end
 
 function Animation:updateGlobalTick(tick)
