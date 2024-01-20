@@ -56,13 +56,13 @@ end
 
 local customAnimations = {
     ['Pulse'] = function(self)
-        if (currentTick - self.values.tick >= self.time) then
+        if (self:isFinalized()) then
             self:updateTick()
         end
         return {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick) / self.time, self.subEasing or 'Linear', self.aditionalValues and unpack(self.aditionalValues))};
     end,
     ['Floating'] = function(self)
-        if (currentTick - self.values.tick >= self.time) then
+        if (self:isFinalized()) then
             self:update({
                 start = self.final,
                 final = self.start
