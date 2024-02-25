@@ -1,4 +1,3 @@
-
 Animation = {}
 local currentTick = getTickCount()
 
@@ -17,6 +16,7 @@ function Animation:create(data)
     instance.time = data.time
     instance.easing = data.easing
     instance.aditionalValues = data.aditionalValues or {}
+    instance.customize = data.customize or {}
 
     -- others
     instance.values = {
@@ -48,7 +48,7 @@ function Animation:tryExecuteAtributte()
 end
 
 function Animation:executeAnimation()
-    self.values.interpolate = {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick / self.time), self.easing, self.aditionalValues and unpack(self.aditionalValues))}
+    self.values.interpolate = {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick) / self.time, self.easing, self.aditionalValues and unpack(self.aditionalValues))}
     return self.values.interpolate;
 end
 
@@ -57,7 +57,7 @@ end
 local customAnimations = {
     ['Pulse'] = function(self)
         if (self:isFinalized()) then
-            self:updateTick()
+            self:updateTick(true)
         end
         return {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick) / self.time, self.subEasing or 'Linear', self.aditionalValues and unpack(self.aditionalValues))};
     end,
@@ -66,6 +66,36 @@ local customAnimations = {
             self:update({
                 start = self.final,
                 final = self.start
+            })
+        end
+        return {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick) / self.time, self.subEasing or 'Linear', self.aditionalValues and unpack(self.aditionalValues))};
+    end,
+    ['Shake'] = function(self)        
+        if (not self.shakeProperties) then
+            self.shakeProperties = {
+                count = 0,
+                state = true
+            }
+        end
+
+
+        if (self:isFinalized() and self.shakeProperties.state) then
+            self.shakeProperties.count = self.shakeProperties.count + 1;
+
+            self:update({
+                start = self.final,
+                final = {-self.start[1], self.start[2], self.start[3]}
+            })
+        end
+
+        if (self.shakeProperties.count >= (self.customize.count or 10) and self.shakeProperties.state) then
+            self.shakeProperties.state = false;
+
+            local ip = ((self.customize.count or 10) % 2 ~= 0)
+            self:update({
+                start = (not ip and self.final or self.start),
+                final = (not ip and self.start or self.final),
+                easing = 'OutQuad'
             })
         end
         return {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick) / self.time, self.subEasing or 'Linear', self.aditionalValues and unpack(self.aditionalValues))};
@@ -135,11 +165,15 @@ function Animation:update(data)
     return true;
 end
 
-function Animation:updateTick()
-    if (not customAnimations[self.easing]) then
+function Animation:updateTick(force)
+    if (not customAnimations[self.easing] or force) then
         self.values.tick = getTickCount()
     end
     return true;
+end
+
+function Animation:changeTime(time)
+    self.time = time
 end
 
 function Animation:get()
@@ -151,6 +185,6 @@ function Animation:get()
     return self:executeAnimation();
 end
 
-function Animation:updateGlobalTick(tick)
+function updateGlobalTick(tick)
     currentTick = tick or getTickCount()
 end
