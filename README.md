@@ -5,7 +5,7 @@ V2.0.0
 # IMPORTANTE
 ```lua
 -- Dentro do seu render utilize
-Animation:updateGlobalTick()
+updateGlobalTick()
 -- Para o script não ficar executando varias vezes a função getTickCount()
 ```
 
@@ -87,6 +87,6 @@ addEventHandler('onClientRender', root, function()
 
     dxDrawRectangle(100 - value[1]/2, 100 - value[1]/2, value[1], value[1])
 
-    Animation:updateGlobalTick() -- Para otimização do codigo em geral, não ficar executando varias funções ao mesmo tempo ( IMPORTANTE PARA O FUNCIONAMENTO!!!! )
+    updateGlobalTick() -- Para otimização do codigo em geral, não ficar executando varias funções ao mesmo tempo ( IMPORTANTE PARA O FUNCIONAMENTO!!!! )
 end)
 ```
