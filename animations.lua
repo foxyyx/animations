@@ -71,16 +71,15 @@ local customAnimations = {
         return {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick) / self.time, self.subEasing or 'Linear', self.aditionalValues and unpack(self.aditionalValues))};
     end,
     ['Shake'] = function(self)        
-        if (not self.shakeProperties) then
-            self.shakeProperties = {
+        if (not self.customProperties) then
+            self.customProperties = {
                 count = 0,
                 state = true
             }
         end
 
-
-        if (self:isFinalized() and self.shakeProperties.state) then
-            self.shakeProperties.count = self.shakeProperties.count + 1;
+        if (self:isFinalized() and self.customProperties.state) then
+            self.customProperties.count = self.customProperties.count + 1;
 
             self:update({
                 start = self.final,
@@ -88,14 +87,13 @@ local customAnimations = {
             })
         end
 
-        if (self.shakeProperties.count >= (self.customize.count or 10) and self.shakeProperties.state) then
-            self.shakeProperties.state = false;
+        if (self.customProperties.count >= (self.customize.count or 10) and self.customProperties.state) then
+            self.customProperties.state = false;
 
             local ip = ((self.customize.count or 10) % 2 ~= 0)
             self:update({
                 start = (not ip and self.final or self.start),
-                final = (not ip and self.start or self.final),
-                easing = 'OutQuad'
+                final = (not ip and self.start or self.final)
             })
         end
         return {interpolateBetween(self.start[1], self.start[2], self.start[3], self.final[1], self.final[2], self.final[3], (currentTick - self.values.tick) / self.time, self.subEasing or 'Linear', self.aditionalValues and unpack(self.aditionalValues))};
@@ -166,6 +164,10 @@ function Animation:update(data)
 end
 
 function Animation:updateTick(force)
+    if (customAnimations[self.easing]) then
+        self.customProperties = nil
+    end
+
     if (not customAnimations[self.easing] or force) then
         self.values.tick = getTickCount()
     end
