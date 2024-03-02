@@ -83,7 +83,7 @@ local customAnimations = {
 
             self:update({
                 start = self.final,
-                final = {-self.start[1], self.start[2], self.start[3]}
+                final = {-self.start[1], -self.start[2], -self.start[3]}
             })
         end
 
