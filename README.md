@@ -11,7 +11,7 @@ updateGlobalTick()
 
 ## Custom Animations - Easing
 ```lua
--- Pulse, Floating
+-- Pulse, Floating, Shake
 
 -- As customAnimations estão abertas para os desenvolvedores adicionarem mais tipos ao decorrer de suas necessidades, em breve no branch main sera adicionado mais diversidades de animações
 ```
