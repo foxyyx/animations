@@ -83,7 +83,7 @@ local anim = Animation:create({
 
 
 addEventHandler('onClientRender', root, function()
-    local value = anim:get(t)
+    local value = anim:get()
 
     dxDrawRectangle(100 - value[1]/2, 100 - value[1]/2, value[1], value[1])
 
