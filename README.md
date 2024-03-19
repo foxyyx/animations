@@ -54,7 +54,7 @@ Animation:updateTick()
 ```
 Pegar o valor do interpolate
 ```lua
-Animation:get()
+Animation:obtain()
 ```
 Pegar informações da animação
 ```lua
@@ -83,7 +83,7 @@ local anim = Animation:create({
 
 
 addEventHandler('onClientRender', root, function()
-    local value = anim:get()
+    local value = anim:obtain()
 
     dxDrawRectangle(100 - value[1]/2, 100 - value[1]/2, value[1], value[1])
 
