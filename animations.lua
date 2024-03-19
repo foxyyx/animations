@@ -178,7 +178,7 @@ function Animation:changeTime(time)
     self.time = time
 end
 
-function Animation:get()
+function Animation:obtain()
     self:tryExecuteAtributte()
     
     if (customAnimations[self.easing]) then
